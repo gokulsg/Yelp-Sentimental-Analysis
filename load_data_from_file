@@ -1,0 +1,33 @@
+def load_data_from_file(filename):
+    with open(filename) as infile:
+        features = []
+        labels = []
+        num_data = 0
+        num_pos_data = 0
+        num_neg_data = 0
+        data_size = 5000
+        half_size = data_size / 2
+        for line in infile:
+
+            review = json.loads(line)
+            if int(review['stars']) > 3:    # Positive
+                if num_pos_data < half_size:
+                    labels.append('1')
+                    features.append(review['text'])
+                    num_pos_data += 1
+                    num_data += 1
+
+            if int(review['stars']) < 3:    # Negative
+                if num_neg_data < half_size:
+                    labels.append('-1')
+                    features.append(review['text'])
+                    num_neg_data += 1
+                    num_data += 1
+
+            if num_pos_data + num_neg_data == data_size:
+                # features = features_pos[0:1000] + features_neg[0:1000]
+                print (len(features), len(labels), num_pos_data, num_neg_data)
+                return features, labels
+
+    return features, labels
+    
